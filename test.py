@@ -1,1 +1,2 @@
-print('Hell git')
+print('Hell Git')
+print('Hollow Jeju')
