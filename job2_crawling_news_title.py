@@ -47,3 +47,4 @@ df_title.to_csv('./crawling_data/naver_news.csv')
 
 df_title.info()
 print(df_title['category'].value_counts())
+
