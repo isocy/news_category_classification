@@ -17,7 +17,8 @@ options.add_argument('window-size=1920x1080')
 options.add_argument('disable-gpu')
 options.add_argument('--no-sandbox')
 
-service = Service(executable_path=ChromeDriverManager().install())
+with open('./chrome_driver_path.txt', 'r') as f:
+    service = Service(executable_path=f.read())
 
 driver = webdriver.Chrome(service=service, options=options)
 
@@ -29,19 +30,23 @@ for category_idx in range(6):
     refined_titles = []
     url_segment = 'https://news.naver.com/main/main.naver?mode=LSD&mid=shm&sid1=10{}'.format(category_idx)
 
-    for page in range(1, pages[category_idx] + 1):
+    for page in range(1, pages[category_idx]):
         url = url_segment + '#&date=%2000:00:00&page={}'.format(page)
         driver.get(url)
 
         for ul_idx in range(1, 5):
             for li_idx in range(1, 6):
-                while True:
+                while True:  # infinite loop for 'StaleElementReferenceException'
                     try:
                         title = driver.find_element('xpath', '//*[@id="section_body"]/ul[{0}]/li[{1}]/dl/dt[2]/a'.format(ul_idx, li_idx)).text
                     except StaleElementReferenceException:
                         continue
                     except NoSuchElementException:
-                        title = driver.find_element('xpath', '//*[@id="section_body"]/ul[{0}]/li[{1}]/dl/dt/a'.format(ul_idx, li_idx)).text
+                        # print(category_idx, page, ul_idx, li_idx)
+                        try:
+                            title = driver.find_element('xpath', '//*[@id="section_body"]/ul[{0}]/li[{1}]/dl/dt/a'.format(ul_idx, li_idx)).text
+                        except NoSuchElementException:
+                            break
                     refined_title = re.compile('[^가-힣]').sub(' ', title)
                     refined_titles.append(refined_title)
                     break
