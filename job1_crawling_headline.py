@@ -39,4 +39,4 @@ df_titles.to_csv('./crawling_data/naver_headline_news_{}.csv'.format(
     datetime.datetime.now().strftime('%Y%m%d')), index=False)
 
 print("hi!")
-print("hi!")
+
