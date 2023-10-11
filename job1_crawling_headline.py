@@ -37,3 +37,5 @@ print(df_titles)
 print(df_titles['categories'].value_counts())
 df_titles.to_csv('./crawling_data/naver_headline_news_{}.csv'.format(
     datetime.datetime.now().strftime('%Y%m%d')), index=False)
+
+print("asdf")
