@@ -1,3 +1,5 @@
 print("Hello my name is Taeui")
 print("do confirm bro")
-print("ISOCY")
+
+print("NO! please confirm my request")
+print("my name is SungChan")
