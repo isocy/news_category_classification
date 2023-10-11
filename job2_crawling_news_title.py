@@ -32,13 +32,19 @@ for category_idx in range(6):
     for page in range(1, pages[category_idx] + 1):
         url = url_segment + '#&date=%2000:00:00&page={}'.format(page)
         driver.get(url)
-        time.sleep(0.1)
 
         for ul_idx in range(1, 5):
             for li_idx in range(1, 6):
-                title = driver.find_element('xpath', '//*[@id="section_body"]/ul[{0}]/li[{1}]/dl/dt[2]/a'.format(ul_idx, li_idx)).text
-                refined_title = re.compile('[^가-힣]').sub(' ', title)
-                refined_titles.append(refined_title)
+                while True:
+                    try:
+                        title = driver.find_element('xpath', '//*[@id="section_body"]/ul[{0}]/li[{1}]/dl/dt[2]/a'.format(ul_idx, li_idx)).text
+                    except StaleElementReferenceException:
+                        continue
+                    except NoSuchElementException:
+                        title = driver.find_element('xpath', '//*[@id="section_body"]/ul[{0}]/li[{1}]/dl/dt/a'.format(ul_idx, li_idx)).text
+                    refined_title = re.compile('[^가-힣]').sub(' ', title)
+                    refined_titles.append(refined_title)
+                    break
 
     df_section_title = pd.DataFrame(refined_titles, columns=['title'])
     df_section_title['category'] = category[category_idx]
@@ -47,4 +53,3 @@ df_title.to_csv('./crawling_data/naver_news.csv')
 
 df_title.info()
 print(df_title['category'].value_counts())
-
