@@ -36,7 +36,7 @@ for idx in range(len(title_series)):
 tokenizer = Tokenizer()
 tokenizer.fit_on_texts(title_series)
 tokenized_titles = tokenizer.texts_to_sequences(title_series)
-word_size = len(tokenizer.word_index)
+word_cnt = len(tokenizer.word_index)
 
 token_max = 0
 for tokenized_title in tokenized_titles:
@@ -49,11 +49,9 @@ with open('./models/label_encoder.pickle', 'wb') as f_labelEncoder:
 with open('./models/tokenizer.pickle', 'wb') as f_tokenizer:
     pickle.dump(tokenizer, f_tokenizer)
 
-train_titles, test_titles, train_category, test_category = train_test_split(
+train_titles, test_titles, train_categories, test_category = train_test_split(
     tokenized_titles, oneHotEncoded_category, test_size=0.2)
-print(train_titles.shape, train_category.shape)
-print(test_titles.shape, test_category.shape)
 
-dataset = train_titles, test_titles, train_category, test_category
-np.save('./crawling_data/news_dataset_tokenMax_{}_wordSize_{}'
-        .format(token_max, word_size), dataset)
+dataset = train_titles, test_titles, train_categories, test_category
+np.save('./crawling_data/news_dataset_tokenMax_{}_wordCnt_{}'
+        .format(token_max, word_cnt), dataset)
